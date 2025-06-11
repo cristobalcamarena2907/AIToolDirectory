@@ -1,0 +1,260 @@
+@import '../styles/variables.css';
+
+.home {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.hero {
+  text-align: center;
+  padding: 4rem 1rem;
+  background: linear-gradient(to right, var(--color-light), var(--color-mint));
+  border-radius: var(--border-radius);
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  color: var(--text-color);
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  color: var(--text-light);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.categories {
+  text-align: center;
+}
+
+.categories h2 {
+  font-size: 1.8rem;
+  color: var(--text-color);
+  margin-bottom: 1.5rem;
+}
+
+.filters {
+  max-width: 1200px;
+  margin: 0 auto 2rem;
+  padding: 0 1rem;
+}
+
+.filter-section {
+  margin-bottom: 1.5rem;
+}
+
+.filter-section h3 {
+  color: var(--text-color);
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.category-buttons,
+.type-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.category-button,
+.type-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.category-button {
+  background-color: var(--color-light);
+  color: var(--text-color);
+}
+
+.type-button {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.category-button:hover {
+  background-color: var(--color-hover);
+}
+
+.type-button:hover {
+  background-color: var(--primary-hover);
+}
+
+.category-button.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.type-button.active {
+  background-color: var(--primary-hover);
+}
+
+.tool-tags {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.category,
+.type {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+}
+
+.category {
+  background-color: var(--category-bg);
+  color: var(--category-text);
+}
+
+.type {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.featured-tools h2 {
+  font-size: 1.8rem;
+  color: var(--text-color);
+  margin-bottom: 1.5rem;
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.tool-card {
+  background-color: var(--card-background);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s ease-in-out;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.tool-card:hover {
+  transform: translateY(-4px);
+}
+
+.tool-image {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background-color: var(--color-light);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.tool-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.tool-card:hover .tool-image img {
+  transform: scale(1.05);
+}
+
+.tool-info {
+  padding: 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.tool-info h3 {
+  font-size: 1.25rem;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+}
+
+.tool-info .category {
+  display: inline-block;
+  background-color: var(--category-bg);
+  color: var(--category-text);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.tool-info p {
+  color: var(--text-light);
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+  line-height: 1.5;
+}
+
+.tool-actions {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 1.5rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.visit-button {
+  width: 75%;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.visit-button:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.favorite-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-light);
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.favorite-button:hover {
+  transform: translateY(-2px);
+}
+
+.favorite-button.favorited {
+  color: var(--primary-color);
+}
+
+.favorite-button i {
+  font-size: 1.2rem;
+  transition: transform 0.2s ease;
+}
+
+.favorite-button:hover i {
+  transform: scale(1.1);
+}
+
