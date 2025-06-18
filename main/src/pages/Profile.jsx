@@ -18,6 +18,7 @@ function Profile() {
   const [bio, setBio] = useState('');
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [ratings, setRatings] = useState({});
   const { user } = useAuth();
   const storage = getStorage(app);
   const navigate = useNavigate();
@@ -113,13 +114,32 @@ function Profile() {
           tools.push({ id: toolDoc.id, ...toolDoc.data() });
         }
       }
-
       setFavoriteTools(tools);
+      fetchRatingsForTools(tools);
     } catch (error) {
       console.error('Error fetching favorite tools:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchRatingsForTools = async (toolsList) => {
+    const ratingsObj = {};
+    for (const tool of toolsList) {
+      const reviewsQuery = query(
+        collection(db, 'reviews'),
+        where('toolId', '==', tool.id)
+      );
+      const reviewsSnapshot = await getDocs(reviewsQuery);
+      const reviews = reviewsSnapshot.docs.map(doc => doc.data());
+      if (reviews.length > 0) {
+        const avg = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+        ratingsObj[tool.id] = avg;
+      } else {
+        ratingsObj[tool.id] = 0;
+      }
+    }
+    setRatings(ratingsObj);
   };
 
   const handleFavoriteClick = async (toolId) => {
@@ -215,6 +235,7 @@ function Profile() {
                 <ToolCard
                   key={tool.id}
                   tool={tool}
+                  avgRating={ratings[tool.id] || 0}
                   onFavoriteClick={handleFavoriteClick}
                   isFavorite={true}
                 />

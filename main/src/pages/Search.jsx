@@ -45,6 +45,7 @@ function Search() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedType, setSelectedType] = useState('all');
   const [favorites, setFavorites] = useState([]);
+  const [ratings, setRatings] = useState({}); // { toolId: avgRating }
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -64,11 +65,31 @@ function Search() {
         ...doc.data()
       }));
       setTools(toolsList);
+      fetchRatingsForTools(toolsList);
     } catch (error) {
       console.error('Error fetching tools:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchRatingsForTools = async (toolsList) => {
+    const ratingsObj = {};
+    for (const tool of toolsList) {
+      const reviewsQuery = query(
+        collection(db, 'reviews'),
+        where('toolId', '==', tool.id)
+      );
+      const reviewsSnapshot = await getDocs(reviewsQuery);
+      const reviews = reviewsSnapshot.docs.map(doc => doc.data());
+      if (reviews.length > 0) {
+        const avg = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+        ratingsObj[tool.id] = avg;
+      } else {
+        ratingsObj[tool.id] = 0;
+      }
+    }
+    setRatings(ratingsObj);
   };
 
   const fetchFavorites = async () => {
@@ -216,6 +237,7 @@ function Search() {
               <ToolCard
                 key={tool.id}
                 tool={tool}
+                avgRating={ratings[tool.id] || 0}
                 onFavoriteClick={handleFavoriteClick}
                 isFavorite={favorites.includes(tool.id)}
               />

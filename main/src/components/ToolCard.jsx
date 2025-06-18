@@ -18,7 +18,7 @@ const toolImages = {
   'default': defaultImage
 };
 
-function ToolCard({ tool, onFavoriteClick, isFavorite, showActions = true }) {
+function ToolCard({ tool, onFavoriteClick, isFavorite, showActions = true, avgRating = 0 }) {
   const [isHovered, setIsHovered] = useState(false);
 
   const getToolImage = (tool) => {
@@ -53,6 +53,18 @@ function ToolCard({ tool, onFavoriteClick, isFavorite, showActions = true }) {
         </div>
         <div className="tool-info">
           <h3>{tool.name}</h3>
+          <div className="tool-rating">
+            {[...Array(5)].map((_, i) => (
+              <i
+                key={i}
+                className={`fas fa-star ${i < Math.round(avgRating) ? 'active' : ''}`}
+                style={{ color: i < Math.round(avgRating) ? '#ffd700' : '#ddd', fontSize: '1rem' }}
+              />
+            ))}
+            <span className="tool-rating-value" style={{ marginLeft: 6, color: '#555', fontWeight: 500 }}>
+              {avgRating > 0 ? avgRating.toFixed(1) : 'N/A'}
+            </span>
+          </div>
           <p>{tool.description}</p>
         </div>
       </Link>

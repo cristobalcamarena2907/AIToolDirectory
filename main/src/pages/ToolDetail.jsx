@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { doc, getDoc, setDoc, deleteDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, deleteDoc, collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '../services/firebase';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -19,6 +19,11 @@ function ToolDetail() {
   const [error, setError] = useState(null);
   const [isFavorite, setIsFavorite] = useState(false);
   const { user } = useAuth();
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState('');
+  const [reviews, setReviews] = useState([]);
+  const [hoveredRating, setHoveredRating] = useState(0);
+  const [averageRating, setAverageRating] = useState(0);
 
   // Mapeo de nombres de herramientas a sus imágenes
   const toolImages = {
@@ -71,6 +76,35 @@ function ToolDetail() {
     checkFavoriteStatus();
   }, [user, id]);
 
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const reviewsQuery = query(
+          collection(db, 'reviews'),
+          where('toolId', '==', id),
+          orderBy('createdAt', 'desc')
+        );
+        const querySnapshot = await getDocs(reviewsQuery);
+        const reviewsData = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setReviews(reviewsData);
+        // Calcular promedio
+        if (reviewsData.length > 0) {
+          const total = reviewsData.reduce((sum, review) => sum + review.rating, 0);
+          setAverageRating(total / reviewsData.length);
+        } else {
+          setAverageRating(0);
+        }
+      } catch (error) {
+        console.error('Error fetching reviews:', error);
+      }
+    };
+
+    fetchReviews();
+  }, [id]);
+
   const handleFavoriteClick = async () => {
     if (!user) {
       return;
@@ -110,6 +144,50 @@ function ToolDetail() {
       'default': 'fa-magic'
     };
     return typeIcons[type] || typeIcons.default;
+  };
+
+  const handleSubmitReview = async (e) => {
+    e.preventDefault();
+    if (!user) {
+      navigate('/signin');
+      return;
+    }
+
+    if (rating === 0) {
+      alert('Please select a rating');
+      return;
+    }
+
+    try {
+      const reviewRef = doc(collection(db, 'reviews'));
+      await setDoc(reviewRef, {
+        toolId: id,
+        userId: user.uid,
+        userEmail: user.email,
+        rating,
+        comment,
+        createdAt: new Date().toISOString()
+      });
+
+      // Refresh reviews
+      const reviewsQuery = query(
+        collection(db, 'reviews'),
+        where('toolId', '==', id),
+        orderBy('createdAt', 'desc')
+      );
+      const querySnapshot = await getDocs(reviewsQuery);
+      const reviewsData = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setReviews(reviewsData);
+
+      // Reset form
+      setRating(0);
+      setComment('');
+    } catch (error) {
+      console.error('Error submitting review:', error);
+    }
   };
 
   if (loading) {
@@ -187,6 +265,79 @@ function ToolDetail() {
             <p>{tool.longDescription}</p>
           </div>
         )}
+
+        <div className="reviews-section">
+          <h2>Reviews & Ratings</h2>
+          <div className="average-rating">
+            <div className="rating-stars">
+              {[...Array(5)].map((_, index) => (
+                <i
+                  key={index}
+                  className={`fas fa-star ${index < Math.round(averageRating) ? 'active' : ''}`}
+                />
+              ))}
+            </div>
+            <span className="rating-value">{averageRating.toFixed(1)}</span>
+            <span className="rating-count">({reviews.length} reviews)</span>
+          </div>
+          
+          {user ? (
+            <form onSubmit={handleSubmitReview} className="review-form">
+              <div className="rating-input">
+                <label>Your Rating:</label>
+                <div className="star-rating">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <i
+                      key={star}
+                      className={`fas fa-star ${star <= (hoveredRating || rating) ? 'active' : ''}`}
+                      onClick={() => setRating(star)}
+                      onMouseEnter={() => setHoveredRating(star)}
+                      onMouseLeave={() => setHoveredRating(0)}
+                    />
+                  ))}
+                </div>
+              </div>
+              <textarea
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                placeholder="Write your review..."
+                required
+              />
+              <button type="submit" className="submit-review-button">
+                Submit Review
+              </button>
+            </form>
+          ) : (
+            <div className="login-prompt">
+              <p>Please <Link to="/signin">sign in</Link> to leave a review</p>
+            </div>
+          )}
+
+          <div className="reviews-list">
+            {reviews.map((review) => (
+              <div key={review.id} className="review-card">
+                <div className="review-header">
+                  <div className="review-user">
+                    <i className="fas fa-user-circle"></i>
+                    <span>{review.userEmail}</span>
+                  </div>
+                  <div className="review-rating">
+                    {[...Array(5)].map((_, index) => (
+                      <i
+                        key={index}
+                        className={`fas fa-star ${index < review.rating ? 'active' : ''}`}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <p className="review-comment">{review.comment}</p>
+                <span className="review-date">
+                  {new Date(review.createdAt).toLocaleDateString()}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       <button onClick={() => navigate(-1)} className="back-button">
