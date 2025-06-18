@@ -189,6 +189,17 @@ function Search() {
     'music'
   ];
 
+  // Icon mapping for each type
+  const typeIcons = {
+    all: 'fas fa-th-large',
+    text: 'fas fa-font',
+    code: 'fas fa-code',
+    video: 'fas fa-video',
+    image: 'fas fa-image',
+    sound: 'fas fa-volume-up',
+    music: 'fas fa-music'
+  };
+
   if (loading) {
     return (
       <div className="loading">
@@ -222,6 +233,7 @@ function Search() {
                 className={`type-button ${selectedType === type ? 'active' : ''}`}
                 onClick={() => setSelectedType(type)}
               >
+                <i className={typeIcons[type]}></i>
                 {type.charAt(0).toUpperCase() + type.slice(1)}
               </button>
             ))}
