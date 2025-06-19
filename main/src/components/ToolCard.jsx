@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+// import { useState } from 'react';
 import './ToolCard.css';
 
 // Import images
@@ -19,8 +19,6 @@ const toolImages = {
 };
 
 function ToolCard({ tool, onFavoriteClick, isFavorite, showActions = true, avgRating = 0 }) {
-  const [isHovered, setIsHovered] = useState(false);
-
   const getToolImage = (tool) => {
     const toolId = tool.id.toLowerCase();
     const toolName = tool.name.toLowerCase();
@@ -42,11 +40,7 @@ function ToolCard({ tool, onFavoriteClick, isFavorite, showActions = true, avgRa
   };
 
   return (
-    <div 
-      className="tool-card"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+    <div className="tool-card">
       <Link to={`/tool/${tool.id}`} className="tool-card-link">
         <div className="tool-image">
           <img src={getToolImage(tool)} alt={tool.name} />
@@ -54,13 +48,34 @@ function ToolCard({ tool, onFavoriteClick, isFavorite, showActions = true, avgRa
         <div className="tool-info">
           <h3>{tool.name}</h3>
           <div className="tool-rating">
-            {[...Array(5)].map((_, i) => (
-              <i
-                key={i}
-                className={`fas fa-star ${i < Math.round(avgRating) ? 'active' : ''}`}
-                style={{ color: i < Math.round(avgRating) ? '#ffd700' : '#ddd', fontSize: '1rem' }}
-              />
-            ))}
+            {[...Array(5)].map((_, i) => {
+              const diff = avgRating - i;
+              if (diff >= 1) {
+                return (
+                  <i
+                    key={i}
+                    className="fas fa-star active"
+                    style={{ color: 'var(--primary-color)', fontSize: '1rem' }}
+                  />
+                );
+              } else if (diff >= 0.5) {
+                return (
+                  <i
+                    key={i}
+                    className="fas fa-star-half-alt active"
+                    style={{ color: 'var(--primary-color)', fontSize: '1rem' }}
+                  />
+                );
+              } else {
+                return (
+                  <i
+                    key={i}
+                    className="fas fa-star"
+                    style={{ color: '#ddd', fontSize: '1rem' }}
+                  />
+                );
+              }
+            })}
             <span className="tool-rating-value" style={{ marginLeft: 6, color: '#555', fontWeight: 500 }}>
               {avgRating > 0 ? avgRating.toFixed(1) : 'N/A'}
             </span>
@@ -95,4 +110,18 @@ function ToolCard({ tool, onFavoriteClick, isFavorite, showActions = true, avgRa
   );
 }
 
-export default ToolCard; 
+export default ToolCard;
+
+export const getToolImage = (tool) => {
+  const toolId = tool.id.toLowerCase();
+  const toolName = tool.name.toLowerCase();
+  if (toolImages[toolId]) {
+    return toolImages[toolId];
+  }
+  for (const [key, image] of Object.entries(toolImages)) {
+    if (toolName.includes(key)) {
+      return image;
+    }
+  }
+  return toolImages['default'];
+}; 

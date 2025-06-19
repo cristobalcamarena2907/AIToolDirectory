@@ -4,12 +4,7 @@ import { db } from '../services/firebase';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import './ToolDetail.css';
-
-// Importar imágenes desde assets
-import openaiImage from '../assets/openai.png';
-import geminiImage from '../assets/gemini.png';
-import claudeImage from '../assets/claude.png';
-import perplexityImage from '../assets/perplexity.png';
+import { getToolImage } from '../components/ToolCard';
 
 function ToolDetail() {
   const { id } = useParams();
@@ -25,14 +20,6 @@ function ToolDetail() {
   const [hoveredRating, setHoveredRating] = useState(0);
   const [averageRating, setAverageRating] = useState(0);
 
-  // Mapeo de nombres de herramientas a sus imágenes
-  const toolImages = {
-    'openai': openaiImage,
-    'gemini': geminiImage,
-    'claude': claudeImage,
-    'perplexity': perplexityImage
-  };
-
   useEffect(() => {
     const fetchTool = async () => {
       try {
@@ -44,7 +31,7 @@ function ToolDetail() {
           setTool({ 
             id: toolDoc.id, 
             ...toolData,
-            image: toolImages[id] // Usar directamente la imagen del assets
+            image: getToolImage({ id: id, name: toolData.name })
           });
         } else {
           setError('Tool not found.');
@@ -219,127 +206,126 @@ function ToolDetail() {
 
   return (
     <div className="tool-detail-page">
-      <div className="tool-detail-content">
-        <div className="tool-detail-card">
-          <div className="tool-header">
-            <h1>{tool.name}</h1>
-          </div>
-
-          <div className="tool-detail-image">
-            <img src={toolImages[id]} alt={tool.name} />
-          </div>
-
-          <div className="tool-content">
-            <p className="description">{tool.description}</p>
-            
-            {tool.type && Array.isArray(tool.type) && (
-              <div className="tool-types">
-                {tool.type.map((type, index) => (
-                  <span key={index} className="type-tag">
-                    <i className={`fas ${getTypeIcon(type)}`}></i>
-                    {type}
-                  </span>
-                ))}
-              </div>
-            )}
-
-            <div className="detail-actions">
-              <a href={tool.url} target="_blank" rel="noopener noreferrer" className="visit-button">
-                Visit Tool
-              </a>
-              {user && (
-                <button 
-                  onClick={handleFavoriteClick} 
-                  className={`visit-button favorite ${isFavorite ? 'active' : ''}`}
-                >
-                  {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
-                </button>
+      <div className="tool-detail-columns">
+        <div className="tool-detail-card-col">
+          <div className="tool-detail-card">
+            <div className="tool-header">
+              <h1>{tool.name}</h1>
+            </div>
+            <div className="tool-detail-image">
+              <img src={getToolImage({ id: tool.id, name: tool.name })} alt={tool.name} />
+            </div>
+            <div className="tool-content">
+              <p className="description">{tool.description}</p>
+              {tool.type && Array.isArray(tool.type) && (
+                <div className="tool-types">
+                  {tool.type.map((type, index) => (
+                    <span key={index} className="type-tag">
+                      <i className={`fas ${getTypeIcon(type)}`}></i>
+                      {type}
+                    </span>
+                  ))}
+                </div>
               )}
+              <div className="detail-actions">
+                <a href={tool.url} target="_blank" rel="noopener noreferrer" className="visit-button">
+                  Visit Tool
+                </a>
+                {user && (
+                  <button 
+                    onClick={handleFavoriteClick} 
+                    className={`visit-button favorite ${isFavorite ? 'active' : ''}`}
+                  >
+                    {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
-
-        {tool.longDescription && (
-          <div className="tool-long-description">
-            <h2>About {tool.name}</h2>
-            <p>{tool.longDescription}</p>
-          </div>
-        )}
-
-        <div className="reviews-section">
-          <h2>Reviews & Ratings</h2>
-          <div className="average-rating">
-            <div className="rating-stars">
-              {[...Array(5)].map((_, index) => (
-                <i
-                  key={index}
-                  className={`fas fa-star ${index < Math.round(averageRating) ? 'active' : ''}`}
-                />
-              ))}
-            </div>
-            <span className="rating-value">{averageRating.toFixed(1)}</span>
-            <span className="rating-count">({reviews.length} reviews)</span>
-          </div>
-          
-          {user ? (
-            <form onSubmit={handleSubmitReview} className="review-form">
-              <div className="rating-input">
-                <label>Your Rating:</label>
-                <div className="star-rating">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <i
-                      key={star}
-                      className={`fas fa-star ${star <= (hoveredRating || rating) ? 'active' : ''}`}
-                      onClick={() => setRating(star)}
-                      onMouseEnter={() => setHoveredRating(star)}
-                      onMouseLeave={() => setHoveredRating(0)}
-                    />
-                  ))}
-                </div>
+        <div className="reviews-section-col">
+          <div className="reviews-section">
+            <h2>Reviews & Ratings</h2>
+            <div className="average-rating">
+              <div className="rating-stars">
+                {[...Array(5)].map((_, index) => {
+                  const diff = averageRating - index;
+                  if (diff >= 1) {
+                    return <i key={index} className="fas fa-star active" />;
+                  } else if (diff >= 0.5) {
+                    return <i key={index} className="fas fa-star-half-alt active" />;
+                  } else {
+                    return <i key={index} className="fas fa-star" />;
+                  }
+                })}
               </div>
-              <textarea
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                placeholder="Write your review..."
-                required
-              />
-              <button type="submit" className="submit-review-button">
-                Submit Review
-              </button>
-            </form>
-          ) : (
-            <div className="login-prompt">
-              <p>Please <Link to="/signin">sign in</Link> to leave a review</p>
+              <span className="rating-value">{averageRating.toFixed(1)}</span>
+              <span className="rating-count">({reviews.length} reviews)</span>
             </div>
-          )}
-
-          <div className="reviews-list">
-            {reviews.map((review) => (
-              <div key={review.id} className="review-card">
-                <div className="review-header">
-                  <div className="review-user">
-                    <i className="fas fa-user-circle"></i>
-                    <span>{review.userEmail}</span>
-                  </div>
-                  <div className="review-rating">
-                    {[...Array(5)].map((_, index) => (
+            {user ? (
+              <form onSubmit={handleSubmitReview} className="review-form">
+                <div className="rating-input">
+                  <label>Your Rating:</label>
+                  <div className="star-rating">
+                    {[1, 2, 3, 4, 5].map((star) => (
                       <i
-                        key={index}
-                        className={`fas fa-star ${index < review.rating ? 'active' : ''}`}
+                        key={star}
+                        className={`fas fa-star ${star <= (hoveredRating || rating) ? 'active' : ''}`}
+                        onClick={() => setRating(star)}
+                        onMouseEnter={() => setHoveredRating(star)}
+                        onMouseLeave={() => setHoveredRating(0)}
                       />
                     ))}
                   </div>
                 </div>
-                <p className="review-comment">{review.comment}</p>
-                <span className="review-date">
-                  {new Date(review.createdAt).toLocaleDateString()}
-                </span>
+                <textarea
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  placeholder="Write your review..."
+                  required
+                />
+                <button type="submit" className="submit-review-button">
+                  Submit Review
+                </button>
+              </form>
+            ) : (
+              <div className="login-prompt">
+                <p>Please <Link to="/signin">sign in</Link> to leave a review</p>
               </div>
-            ))}
+            )}
+            <div className="reviews-list">
+              {reviews.map((review) => (
+                <div key={review.id} className="review-card">
+                  <div className="review-header">
+                    <div className="review-user">
+                      <i className="fas fa-user-circle"></i>
+                      <span>{review.userEmail}</span>
+                    </div>
+                    <div className="review-rating">
+                      {[...Array(5)].map((_, index) => (
+                        <i
+                          key={index}
+                          className={`fas fa-star ${index < review.rating ? 'active' : ''}`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <p className="review-comment">{review.comment}</p>
+                  <span className="review-date">
+                    {new Date(review.createdAt).toLocaleDateString()}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
-
+      {tool.longDescription && (
+        <div className="tool-long-description">
+          <h2>About {tool.name}</h2>
+          <p>{tool.longDescription}</p>
+        </div>
+      )}
       <button onClick={() => navigate(-1)} className="back-button">
         <i className="fas fa-arrow-left"></i>
         Back

@@ -171,6 +171,15 @@
   100% { transform: rotate(360deg); }
 }
 
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: none; }
+}
+
+.tools-grid .tool-card {
+  animation: fadeInUp 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
 @media (max-width: 768px) {
   .search-page {
     padding: 1rem;

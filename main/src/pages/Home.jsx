@@ -157,7 +157,7 @@ function Home() {
 
       {/* FEATURED TOOLS */}
       <section className="featured-tools">
-        <h2>Featured Tools ({tools.length})</h2>
+        <h2>Top Rated Tools</h2>
         <div className="tools-grid">
           {tools.length > 0 ? (
             // Sort by rating and take only the top 3
