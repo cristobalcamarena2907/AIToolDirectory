@@ -7,43 +7,12 @@ import ToolCard from '../components/ToolCard';
 import './Search.css';
 import '../styles/toolCard.css';
 
-// Import images
-import openaiImage from '../assets/openai.png';
-import claudeImage from '../assets/claude.png';
-import geminiImage from '../assets/gemini.png';
-import perplexityImage from '../assets/perplexity.png';
-import defaultImage from '../assets/default-avatar.png';
-
-// Image mapping object
-const toolImages = {
-  // OpenAI related tools
-  'chatgpt': openaiImage,
-  'dall-e': openaiImage,
-  'gpt-4': openaiImage,
-  'openai': openaiImage,
-  
-  // Anthropic/Claude related tools
-  'claude': claudeImage,
-  'anthropic': claudeImage,
-  
-  // Google/Gemini related tools
-  'gemini': geminiImage,
-  'bard': geminiImage,
-  'google ai': geminiImage,
-  
-  // Perplexity related tools
-  'perplexity': perplexityImage,
-  'perplexity ai': perplexityImage,
-  
-  // Default fallback
-  'default': defaultImage
-};
-
 function Search() {
   const [tools, setTools] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedType, setSelectedType] = useState('all');
+  const [isFree, setIsFree] = useState('all'); // 'all', 'free', 'paid'
   const [favorites, setFavorites] = useState([]);
   const [ratings, setRatings] = useState({}); // { toolId: avgRating }
   const { user } = useAuth();
@@ -132,51 +101,45 @@ function Search() {
     }
   };
 
-  const getToolImage = (tool) => {
-    const toolId = tool.id.toLowerCase();
-    const toolName = tool.name.toLowerCase();
-    
-    // First try to match by ID
-    if (toolImages[toolId]) {
-      return toolImages[toolId];
-    }
-    
-    // Then try to match by name
-    for (const [key, image] of Object.entries(toolImages)) {
-      if (toolName.includes(key)) {
-        return image;
-      }
-    }
-    
-    // If no match found, use default
-    return toolImages['default'];
-  };
-
   const filteredTools = tools.filter(tool => {
     // Filter by search query
     const matchesSearch = tool.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          tool.description.toLowerCase().includes(searchQuery.toLowerCase());
     
     // Filter by type
-    if (selectedType === 'all') return matchesSearch;
-    
-    if (!tool.type) return false;
-    
-    let toolTypes = [];
-    if (typeof tool.type === 'string' && tool.type.startsWith('[') && tool.type.endsWith(']')) {
-      try {
-        toolTypes = JSON.parse(tool.type.replace(/'/g, '"'));
-      } catch (e) {
-        console.error("Failed to parse tool.type string:", tool.type, e);
+    let matchesType = true;
+    if (selectedType !== 'all') {
+      if (!tool.type) return false;
+      
+      let toolTypes = [];
+      if (typeof tool.type === 'string' && tool.type.startsWith('[') && tool.type.endsWith(']')) {
+        try {
+          toolTypes = JSON.parse(tool.type.replace(/'/g, '"'));
+        } catch (e) {
+          console.error("Failed to parse tool.type string:", tool.type, e);
+          toolTypes = [tool.type];
+        }
+      } else if (Array.isArray(tool.type)) {
+        toolTypes = tool.type;
+      } else if (tool.type) {
         toolTypes = [tool.type];
       }
-    } else if (Array.isArray(tool.type)) {
-      toolTypes = tool.type;
-    } else if (tool.type) {
-      toolTypes = [tool.type];
+      
+      matchesType = toolTypes.some(type => type.toLowerCase() === selectedType.toLowerCase());
     }
     
-    return matchesSearch && toolTypes.some(type => type.toLowerCase() === selectedType.toLowerCase());
+    // Filter by free/paid status
+    let matchesPricing = true;
+    if (isFree !== 'all') {
+      const toolIsFree = tool.isFree === true || tool.isFree === 'true' || tool.free === true || tool.free === 'true';
+      if (isFree === 'free') {
+        matchesPricing = toolIsFree;
+      } else if (isFree === 'paid') {
+        matchesPricing = !toolIsFree;
+      }
+    }
+    
+    return matchesSearch && matchesType && matchesPricing;
   });
 
   const types = [
@@ -223,44 +186,73 @@ function Search() {
         </div>
       </section>
 
-      <section className="filters">
-        <div className="filter-section">
-          <h3>Categories</h3>
-          <div className="type-buttons">
-            {types.map(type => (
-              <button
-                key={type}
-                className={`type-button ${selectedType === type ? 'active' : ''}`}
-                onClick={() => setSelectedType(type)}
-              >
-                <i className={typeIcons[type]}></i>
-                {type.charAt(0).toUpperCase() + type.slice(1)}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="search-results">
-        <h2>Search Results ({filteredTools.length})</h2>
-        <div className="tools-grid">
-          {filteredTools.length > 0 ? (
-            filteredTools.map((tool) => (
-              <ToolCard
-                key={tool.id}
-                tool={tool}
-                avgRating={ratings[tool.id] || 0}
-                onFavoriteClick={handleFavoriteClick}
-                isFavorite={favorites.includes(tool.id)}
-              />
-            ))
-          ) : (
-            <div className="no-results">
-              <p>No tools found matching your search criteria.</p>
+      <div className="search-layout">
+        <aside className="filters-sidebar">
+          <div className="filter-section">
+            <h3>Categories</h3>
+            <div className="type-buttons">
+              {types.map(type => (
+                <button
+                  key={type}
+                  className={`type-button ${selectedType === type ? 'active' : ''}`}
+                  onClick={() => setSelectedType(type)}
+                >
+                  <i className={typeIcons[type]}></i>
+                  {type.charAt(0).toUpperCase() + type.slice(1)}
+                </button>
+              ))}
             </div>
-          )}
-        </div>
-      </section>
+          </div>
+
+          <div className="filter-section">
+            <h3>Pricing</h3>
+            <div className="pricing-buttons">
+              <button
+                className={`pricing-button ${isFree === 'all' ? 'active' : ''}`}
+                onClick={() => setIsFree('all')}
+              >
+                <i className="fas fa-th-large"></i>
+                All Tools
+              </button>
+              <button
+                className={`pricing-button ${isFree === 'free' ? 'active' : ''}`}
+                onClick={() => setIsFree('free')}
+              >
+                <i className="fas fa-gift"></i>
+                Free
+              </button>
+              <button
+                className={`pricing-button ${isFree === 'paid' ? 'active' : ''}`}
+                onClick={() => setIsFree('paid')}
+              >
+                <i className="fas fa-dollar-sign"></i>
+                Paid
+              </button>
+            </div>
+          </div>
+        </aside>
+
+        <main className="search-results">
+          <h2>Search Results ({filteredTools.length})</h2>
+          <div className="tools-grid">
+            {filteredTools.length > 0 ? (
+              filteredTools.map((tool) => (
+                <ToolCard
+                  key={tool.id}
+                  tool={tool}
+                  avgRating={ratings[tool.id] || 0}
+                  onFavoriteClick={handleFavoriteClick}
+                  isFavorite={favorites.includes(tool.id)}
+                />
+              ))
+            ) : (
+              <div className="no-results">
+                <p>No tools found matching your search criteria.</p>
+              </div>
+            )}
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

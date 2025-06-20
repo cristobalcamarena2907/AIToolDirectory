@@ -80,6 +80,19 @@ function ToolCard({ tool, onFavoriteClick, isFavorite, showActions = true, avgRa
               {avgRating > 0 ? avgRating.toFixed(1) : 'N/A'}
             </span>
           </div>
+          <div className="tool-pricing">
+            {(tool.isFree === true || tool.isFree === 'true' || tool.free === true || tool.free === 'true') ? (
+              <span className="pricing-badge free">
+                <i className="fas fa-gift"></i>
+                Free
+              </span>
+            ) : (
+              <span className="pricing-badge paid">
+                <i className="fas fa-dollar-sign"></i>
+                Paid
+              </span>
+            )}
+          </div>
           <p>{tool.description}</p>
         </div>
       </Link>

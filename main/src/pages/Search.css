@@ -1,7 +1,7 @@
 @import '../styles/variables.css';
 
 .search-page {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
 }
@@ -36,24 +36,36 @@
   color: var(--text-light);
 }
 
-.filters {
-  margin-bottom: 2rem;
-  border-radius: 20px;
-  padding: 2rem;
+/* Layout with sidebar */
+.search-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* Sidebar styles */
+.filters-sidebar {
+  background: var(--card-background);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  height: fit-content;
 }
 
 .filter-section {
-  max-width: 800px;
-  margin: 0 auto;
-  background-color: var(--background-color);
+  margin-bottom: 2rem;
+}
+
+.filter-section:last-child {
+  margin-bottom: 0;
 }
 
 .filter-section h3 {
   color: var(--text-color);
-  font-size: 1.4rem;
-  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
   font-weight: 600;
-  text-align: center;
   position: relative;
   padding-bottom: 0.5rem;
 }
@@ -62,75 +74,84 @@
   content: '';
   position: absolute;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
+  left: 0;
+  width: 50px;
   height: 3px;
   background: linear-gradient(to right, var(--primary-color), var(--primary-hover));
   border-radius: 2px;
 }
 
-.type-buttons {
+.type-buttons,
+.pricing-buttons {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: center;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
-.type-button {
-  padding: 0.8rem 1.5rem;
+.type-button,
+.pricing-button {
+  padding: 0.8rem 1rem;
   border: none;
-  border-radius: 30px;
+  border-radius: 10px;
   background-color: white;
   color: var(--text-color);
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
+  text-align: left;
+  width: 100%;
 }
 
-.type-button:focus {
+.type-button:focus,
+.pricing-button:focus {
   outline: none;
 }
 
-.type-button:hover {
+.type-button:hover,
+.pricing-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  color: var(--color-light);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f8f9fa;
 }
 
-.type-button.active {
+.type-button.active,
+.pricing-button.active {
   background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
   color: white;
-  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
 }
 
-.type-button.active:hover {
-  color: rgba(255, 255, 255, 0.9);
+.type-button.active:hover,
+.pricing-button.active:hover {
+  color: rgba(255, 255, 255, 0.95);
 }
 
-.type-button i {
+.type-button i,
+.pricing-button i {
   font-size: 1.1rem;
+  width: 20px;
+  text-align: center;
 }
 
 .search-results {
-  margin-top: 2rem;
+  margin-top: 0;
 }
 
 .search-results h2 {
   color: var(--text-color);
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   margin-bottom: 1.5rem;
   font-weight: 600;
 }
 
 .tools-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 2rem;
 }
 
@@ -139,8 +160,8 @@
   text-align: center;
   padding: 3rem;
   background: var(--card-background);
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .no-results p {
@@ -180,22 +201,49 @@
   animation: fadeInUp 1.2s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
+@media (max-width: 1024px) {
+  .search-layout {
+    grid-template-columns: 280px 1fr;
+    gap: 1.5rem;
+  }
+  
+  .filters-sidebar {
+    padding: 1.25rem;
+  }
+}
+
 @media (max-width: 768px) {
   .search-page {
     padding: 1rem;
   }
 
-  .filters {
+  .search-layout {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .filters-sidebar {
     padding: 1.5rem;
   }
 
-  .type-buttons {
+  .filter-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .type-buttons,
+  .pricing-buttons {
+    flex-direction: row;
+    flex-wrap: wrap;
     gap: 0.75rem;
   }
 
-  .type-button {
-    padding: 0.6rem 1.2rem;
+  .type-button,
+  .pricing-button {
+    padding: 0.7rem 1.2rem;
     font-size: 0.9rem;
+    width: auto;
+    flex: 1;
+    min-width: 140px;
   }
 
   .tools-grid {
