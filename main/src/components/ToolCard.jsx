@@ -71,12 +71,12 @@ function ToolCard({ tool, onFavoriteClick, isFavorite, showActions = true, avgRa
                   <i
                     key={i}
                     className="fas fa-star"
-                    style={{ color: '#ddd', fontSize: '1rem' }}
+                    style={{ color: 'var(--border-color)', fontSize: '1rem' }}
                   />
                 );
               }
             })}
-            <span className="tool-rating-value" style={{ marginLeft: 6, color: '#555', fontWeight: 500 }}>
+            <span className="tool-rating-value">
               {avgRating > 0 ? avgRating.toFixed(1) : 'N/A'}
             </span>
           </div>
@@ -93,7 +93,6 @@ function ToolCard({ tool, onFavoriteClick, isFavorite, showActions = true, avgRa
               </span>
             )}
           </div>
-          <p>{tool.description}</p>
         </div>
       </Link>
       {showActions && (

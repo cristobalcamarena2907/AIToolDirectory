@@ -120,9 +120,6 @@
   transform: scale(0.95);
 }
 
-.favorite-button.favorited {
-  color: #344e41;
-}
 
 .favorite-button.favorited:hover {
   opacity: 0.8;

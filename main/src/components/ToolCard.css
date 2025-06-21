@@ -8,11 +8,12 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  border: 1px solid var(--border-color);
 }
 
 .tool-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
 }
 
 .tool-card-link {
@@ -28,6 +29,7 @@
   height: 200px;
   object-fit: cover;
   border-bottom: 1px solid var(--border-color);
+  background-color: var(--background-color);
 }
 
 .tool-image img {
@@ -96,6 +98,7 @@
   font-size: 0.9rem;
   margin-bottom: 1.5rem;
   flex-grow: 1;
+  line-height: 1.5;
 }
 
 .tool-footer {
@@ -108,13 +111,14 @@
 .tool-type {
   font-size: 0.8rem;
   color: var(--text-light);
-  background: var(--color-light);
+  background: var(--category-bg);
   padding: 0.3rem 0.8rem;
   border-radius: 20px;
+  border: 1px solid var(--border-color);
 }
 
 .visit-button {
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+  background: var(--primary-color);
   color: white;
   border: none;
   padding: 0.6rem 1.2rem;
@@ -134,8 +138,9 @@
 }
 
 .visit-button:hover {
+  background: var(--primary-hover);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width: 768px) {
@@ -163,7 +168,7 @@
 
 .tool-rating-value {
   margin-left: 6px;
-  color: #555;
+  color: var(--text-light);
   font-weight: 500;
 }
 
@@ -181,18 +186,17 @@
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  border: 1px solid var(--border-color);
 }
 
 .pricing-badge.free {
-  background-color: #e8f5e8;
-  color: #2e7d32;
-  border: 1px solid #4caf50;
+  background-color: var(--category-bg);
+  color: var(--category-text);
 }
 
 .pricing-badge.paid {
-  background-color: #fff3e0;
-  color: #f57c00;
-  border: 1px solid #ff9800;
+  background-color: var(--color-light);
+  color: var(--text-color);
 }
 
 .pricing-badge i {

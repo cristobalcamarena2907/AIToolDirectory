@@ -238,20 +238,7 @@ body {
   transform: scale(0.95);
 }
 
-.favorite-button.favorited {
-  color: #344e41;
-}
 
-.favorite-button.favorited:hover {
-  color: #344e41;
-  opacity: 0.8;
-  transform: scale(1.1);
-}
-
-.favorite-button.favorited:active {
-  color: #3a5a40;
-  transform: scale(0.95);
-}
 
 .favorite-button:focus {
   outline: none;

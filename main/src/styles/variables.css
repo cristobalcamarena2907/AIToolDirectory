@@ -1,24 +1,28 @@
 :root {
-  /* Main Colors */
-  --color-light: #dad7cd;
-  --color-mint: #a3b18a;
-  --color-sage: #588157;
-  --color-forest: #3a5a40;
-  --color-dark: #344e41;
+  /* Main Colors - Metallic Palette */
+  --color-light: #f5f5f5;      /* Light silver */
+  --color-mint: #c0c0c0;       /* Silver */
+  --color-sage: #a8a8a8;       /* Steel gray */
+  --color-forest: #696969;     /* Dim gray */
+  --color-dark: #2f2f2f;       /* Dark steel */
 
   /* UI Colors */
-  --primary-color: var(--color-sage);
-  --primary-hover: var(--color-forest);
-  --background-color: #edebe6;
-  --card-background: #dad7cd;
+  --primary-color: #333333;    /* Dark gray */
+  --primary-hover: #1a1a1a;    /* Near black */
+  --background-color: #fafafa; /* Off-white */
+  --card-background: #ffffff;  /* Pure white */
   --text-color: var(--color-dark);
-  --text-light: #64748b;
+  --text-light: #6c757d;       /* Medium gray */
   
   /* UI Elements */
   --border-radius: 12px;
-  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
   
   /* Category Colors */
-  --category-bg: #e8f5e9;
-  --category-text: var(--color-forest);
+  --category-bg: #f8f9fa;      /* Very light gray background */
+  --category-text: #495057;    /* Dark gray text */
+  
+  /* Metallic Accents */
+  --border-color: #e0e0e0;     /* Light gray border */
+  --color-hover: #f8f9fa;      /* Very light gray hover */
 } 
