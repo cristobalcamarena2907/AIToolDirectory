@@ -7,7 +7,6 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { updateProfile } from 'firebase/auth';
 import defaultAvatar from '../assets/default-avatar.png';
 import './Profile.css';
-import '../styles/toolCard.css';
 import ToolCard from '../components/ToolCard';
 
 function Profile() {

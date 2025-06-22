@@ -5,7 +5,6 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import ToolCard from '../components/ToolCard';
 import './Search.css';
-import '../styles/toolCard.css';
 
 function Search() {
   const [tools, setTools] = useState([]);

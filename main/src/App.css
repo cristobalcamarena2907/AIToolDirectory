@@ -127,123 +127,6 @@ body {
   padding: 0 1rem;
 }
 
-.tool-card {
-  background-color: var(--card-background);
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid var(--border-color);
-}
-
-.tool-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-}
-
-.tool-image {
-  width: 100%;
-  height: 180px;
-  overflow: hidden;
-  background-color: var(--color-light);
-  flex-shrink: 0;
-}
-
-.tool-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.tool-info {
-  padding: 1.25rem;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-}
-
-.tool-info h3 {
-  font-size: 1.15rem;
-  color: var(--text-color);
-  margin-bottom: 0.4rem;
-  font-weight: 600;
-}
-
-.tool-info .category {
-  display: inline-block;
-  background-color: var(--category-bg);
-  color: var(--category-text);
-  padding: 0.2rem 0.6rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  margin-bottom: 0.8rem;
-  align-self: flex-start;
-}
-
-.tool-info p {
-  color: var(--text-light);
-  margin-bottom: 1.25rem;
-  flex-grow: 1;
-  line-height: 1.5;
-  font-size: 0.9rem;
-}
-
-.tool-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  margin-top: auto;
-}
-
-.visit-button {
-  display: inline-block;
-  background-color: var(--primary-color);
-  color: white;
-  padding: 0.6rem 1.2rem;
-  border-radius: var(--border-radius);
-  text-decoration: none;
-  font-weight: 500;
-  transition: background-color 0.2s ease-in-out;
-  flex-grow: 1;
-  text-align: center;
-  font-size: 0.95rem;
-}
-
-.visit-button:hover {
-  background-color: var(--primary-hover);
-  color: white;
-}
-
-.favorite-button {
-  color: var(--text-light);
-  background: none;
-  border: none;
-  font-size: 1.4rem;
-  cursor: pointer;
-  transition: color 0.2s ease, transform 0.1s ease;
-}
-
-.favorite-button:hover {
-  color: var(--text-color);
-  transform: scale(1.1);
-}
-
-.favorite-button:active {
-  color: var(--text-color);
-  transform: scale(0.95);
-}
-
-
-
-.favorite-button:focus {
-  outline: none;
-}
-
 .loading {
   display: flex;
   flex-direction: column;
@@ -299,48 +182,51 @@ body {
 
 .category-filters {
   display: flex;
-  flex-wrap: wrap;
   gap: 0.5rem;
-  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .category-button {
   padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 9999px;
-  background-color: #e2e8f0;
-  color: #64748b;
-  font-size: 0.875rem;
+  border: 2px solid var(--border-color);
+  background: var(--card-background);
+  color: var(--text-color);
+  border-radius: var(--border-radius);
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+  font-size: 0.875rem;
 }
 
 .category-button:hover {
-  background-color: #cbd5e1;
+  border-color: var(--primary-color);
+  background: var(--primary-color);
+  color: white;
 }
 
 .category-button.active {
-  background-color: var(--primary-color);
+  background: var(--primary-color);
   color: white;
+  border-color: var(--primary-color);
 }
 
 .no-results {
   text-align: center;
   padding: 2rem;
-  color: #64748b;
-  font-size: 1.2rem;
+  color: var(--text-light);
+  font-size: 1.1rem;
 }
 
 .tool-card-link {
   text-decoration: none;
   color: inherit;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
-/* Responsive styles */
 @media (max-width: 768px) {
   #root {
-    padding: 0.5rem;
+    padding: 1rem;
   }
 
   .header h1 {
@@ -354,32 +240,6 @@ body {
   .tools-grid {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1rem;
-    padding: 0 0.5rem;
-  }
-
-  .tool-card {
-    margin: 0;
-  }
-
-  .tool-image {
-    height: 160px;
-  }
-
-  .tool-info {
-    padding: 1rem;
-  }
-
-  .tool-info h3 {
-    font-size: 1.1rem;
-  }
-
-  .tool-info p {
-    font-size: 0.85rem;
-  }
-
-  .visit-button {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
   }
 
   .category-button {
@@ -397,18 +257,12 @@ body {
     font-size: 1.75rem;
   }
 
-  .tool-card {
-    max-width: 100%;
-  }
-
   .category-filters {
-    justify-content: flex-start;
-    overflow-x: auto;
-    padding-bottom: 0.5rem;
-    -webkit-overflow-scrolling: touch;
+    justify-content: center;
   }
 
   .category-button {
-    white-space: nowrap;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
   }
 }

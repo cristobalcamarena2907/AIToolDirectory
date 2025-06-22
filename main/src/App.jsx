@@ -20,16 +20,15 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="search" element={<Search />} />
-            <Route path="profile" element={<Profile />} />
+            <Route path="profile" element={
+              <PrivateRoute>
+                <Profile />
+              </PrivateRoute>
+            } />
             <Route path="tool/:id" element={<ToolDetail />} />
           </Route>
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="profile" element={
-            <PrivateRoute>
-              <Profile />
-            </PrivateRoute>
-          } />
         </Routes>
       </AuthProvider>
     </Router>
