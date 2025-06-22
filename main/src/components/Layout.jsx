@@ -34,7 +34,7 @@ function Layout() {
         <div className="nav-content">
           <div className="nav-left">
             <Link to="/" className="nav-logo">
-              AIpedia
+              AI-pedia
             </Link>
           </div>
           <div className="nav-right">

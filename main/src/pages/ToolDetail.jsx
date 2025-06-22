@@ -217,6 +217,57 @@ function ToolDetail() {
             </div>
             <div className="tool-content">
               <p className="description">{tool.description}</p>
+              
+              {/* Rating Display */}
+              <div className="tool-rating">
+                {[...Array(5)].map((_, i) => {
+                  const diff = averageRating - i;
+                  if (diff >= 1) {
+                    return (
+                      <i
+                        key={i}
+                        className="fas fa-star active"
+                        style={{ color: 'var(--primary-color)', fontSize: '1rem' }}
+                      />
+                    );
+                  } else if (diff >= 0.5) {
+                    return (
+                      <i
+                        key={i}
+                        className="fas fa-star-half-alt active"
+                        style={{ color: 'var(--primary-color)', fontSize: '1rem' }}
+                      />
+                    );
+                  } else {
+                    return (
+                      <i
+                        key={i}
+                        className="fas fa-star"
+                        style={{ color: 'var(--border-color)', fontSize: '1rem' }}
+                      />
+                    );
+                  }
+                })}
+                <span className="tool-rating-value">
+                  {averageRating > 0 ? averageRating.toFixed(1) : 'N/A'}
+                </span>
+              </div>
+
+              {/* Pricing Badge */}
+              <div className="tool-pricing">
+                {(tool.isFree === true || tool.isFree === 'true' || tool.free === true || tool.free === 'true') ? (
+                  <span className="pricing-badge free">
+                    <i className="fas fa-gift"></i>
+                    Free
+                  </span>
+                ) : (
+                  <span className="pricing-badge paid">
+                    <i className="fas fa-dollar-sign"></i>
+                    Paid
+                  </span>
+                )}
+              </div>
+
               {tool.type && Array.isArray(tool.type) && (
                 <div className="tool-types">
                   {tool.type.map((type, index) => (
