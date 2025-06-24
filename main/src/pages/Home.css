@@ -508,8 +508,6 @@
   height: 140px;
   object-fit: contain;
   border-radius: 18px;
-  background: #fff;
-  box-shadow: 0 2px 12px rgba(52, 78, 65, 0.10);
   transition: transform 0.3s;
   display: block;
 }
@@ -525,11 +523,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f0f0f0;
   color: #aaa;
   font-size: 1rem;
   border-radius: 18px;
-  box-shadow: 0 2px 12px rgba(52, 78, 65, 0.10);
 }
 
 @media (max-width: 800px) {

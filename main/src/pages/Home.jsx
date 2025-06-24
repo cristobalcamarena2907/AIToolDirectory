@@ -100,6 +100,16 @@ function Home() {
     }
   };
 
+  // Helper to shuffle array
+  function shuffleArray(array) {
+    const arr = array.slice();
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
   if (loading) {
     return (
       <div className="loading">
@@ -133,7 +143,7 @@ function Home() {
             arrows={false}
             autoplay={true}
             autoplaySpeed={0}
-            pauseOnHover={false}
+            pauseOnHover={true}
             cssEase="linear"
             rtl={false}
             responsive={[
@@ -142,7 +152,7 @@ function Home() {
               { breakpoint: 600, settings: { slidesToShow: 1 } }
             ]}
           >
-            {tools.slice(0, 10).map((tool) => (
+            {shuffleArray(tools).slice(0, 10).map((tool) => (
               <div key={tool.id} className="carousel-image-slide">
                 {tool.image ? (
                   <img src={tool.image} alt={tool.name} className="carousel-tool-image" />
