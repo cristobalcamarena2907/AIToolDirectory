@@ -4,6 +4,9 @@ import { db } from '../services/firebase';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import ToolCard from '../components/ToolCard';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 import './Home.css';
 
 function Home() {
@@ -116,6 +119,43 @@ function Home() {
           <button className="cta-button">Explore Tools</button>
         </div>
       </section>
+
+      {/* IMAGE CAROUSEL SECTION */}
+      {tools.length > 0 && (
+        <section className="carousel-section image-carousel-section">
+          <Slider
+            className="home-carousel"
+            dots={false}
+            infinite={true}
+            speed={8000}
+            slidesToShow={5}
+            slidesToScroll={1}
+            arrows={false}
+            autoplay={true}
+            autoplaySpeed={0}
+            pauseOnHover={false}
+            cssEase="linear"
+            rtl={false}
+            responsive={[
+              { breakpoint: 1200, settings: { slidesToShow: 3 } },
+              { breakpoint: 800, settings: { slidesToShow: 2 } },
+              { breakpoint: 600, settings: { slidesToShow: 1 } }
+            ]}
+          >
+            {tools.slice(0, 10).map((tool) => (
+              <div key={tool.id} className="carousel-image-slide">
+                {tool.image ? (
+                  <img src={tool.image} alt={tool.name} className="carousel-tool-image" />
+                ) : tool.imageUrl ? (
+                  <img src={tool.imageUrl} alt={tool.name} className="carousel-tool-image" />
+                ) : (
+                  <div className="carousel-tool-image placeholder-image">No Image</div>
+                )}
+              </div>
+            ))}
+          </Slider>
+        </section>
+      )}
 
       {/* ANIMATED STATS */}
       <section className="stats-section">

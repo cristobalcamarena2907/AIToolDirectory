@@ -30,8 +30,7 @@ function ToolDetail() {
           const toolData = toolDoc.data();
           setTool({ 
             id: toolDoc.id, 
-            ...toolData,
-            image: getToolImage({ id: id, name: toolData.name })
+            ...toolData
           });
         } else {
           setError('Tool not found.');
@@ -213,7 +212,7 @@ function ToolDetail() {
               <h1>{tool.name}</h1>
             </div>
             <div className="tool-detail-image">
-              <img src={getToolImage({ id: tool.id, name: tool.name })} alt={tool.name} />
+              <img src={tool.image ? tool.image : getToolImage({ id: tool.id, name: tool.name })} alt={tool.name} />
             </div>
             <div className="tool-content">
               <p className="description">{tool.description}</p>

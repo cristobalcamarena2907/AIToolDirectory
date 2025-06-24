@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "framer-motion": "^12.19.1",
+    "lottie-react": "^2.4.1",
+    "react-countup": "^6.5.3",
+    "react-slick": "^0.30.3",
+    "slick-carousel": "^1.8.1",
+    "swiper": "^11.2.8"
+  }
+}

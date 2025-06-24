@@ -45,34 +45,36 @@ function SignIn() {
   };
 
   return (
-    <div className="auth-container">
-      <h2>Sign In</h2>
-      {error && <p className="error">{error}</p>}
-      <form onSubmit={handleEmailSignIn}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Sign In</button>
-      </form>
+    <div className="auth-root">
+      <div className="auth-container">
+        <h2>Sign In</h2>
+        {error && <p className="error">{error}</p>}
+        <form onSubmit={handleEmailSignIn}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+          />
+          <button type="submit">Sign In</button>
+        </form>
 
-      {showResend && (
-        <button type="button" onClick={handleResendVerification}>
-          Resend Verification Email
-        </button>
-      )}
+        {showResend && (
+          <button type="button" onClick={handleResendVerification}>
+            Resend Verification Email
+          </button>
+        )}
 
-      <p>Don't have an account? <Link to="/signup">Sign up</Link></p>
+        <p>Don't have an account? <Link to="/signup">Sign up</Link></p>
+      </div>
     </div>
   );
 }

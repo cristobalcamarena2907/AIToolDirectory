@@ -19,6 +19,9 @@ const toolImages = {
 
 function ToolCard({ tool, onFavoriteClick, isFavorite, showActions = true, avgRating = 0 }) {
   const getToolImage = (tool) => {
+    if (tool.image) {
+      return tool.image;
+    }
     const toolId = tool.id.toLowerCase();
     const toolName = tool.name.toLowerCase();
     

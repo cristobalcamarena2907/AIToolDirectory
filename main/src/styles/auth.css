@@ -6,13 +6,26 @@
   --color-dark: #344e41;
 }
 
+body, .auth-root {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .auth-container {
-  max-width: 420px;
-  margin: 5rem auto;
-  padding: 2rem 2.5rem;
-  background-color: var(--color-light);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 340px;
+  max-width: 400px;
+  width: 100%;
+  background: var(--card-background, #fff);
   border-radius: 16px;
-  box-shadow: 0 6px 18px rgba(52, 78, 65, 0.25);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  padding: 2.5rem 2rem;
   color: var(--color-dark);
   font-family: 'Segoe UI', sans-serif;
   animation: fadeIn 0.4s ease-in;
@@ -56,7 +69,7 @@
 }
 
 .auth-container button {
-  background-color: var(--color-forest);
+  background-color: #111;
   color: white;
   border: none;
   padding: 0.75rem 1rem;
@@ -67,7 +80,7 @@
 }
 
 .auth-container button:hover {
-  background-color: var(--color-sage);
+  background-color: #333;
 }
 
 .auth-container p {
@@ -141,4 +154,12 @@
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(15px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 480px) {
+  .auth-container {
+    min-width: unset;
+    max-width: 95vw;
+    padding: 1.5rem 0.5rem;
+  }
 }

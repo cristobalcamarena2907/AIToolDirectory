@@ -29,7 +29,7 @@ const Footer = () => {
         <div className="footer-section">
           <h5>Contact</h5>
           <ul>
-            <li><a href="mailto:contact@aitoolshub.com">contact@aitoolshub.com</a></li>
+            <li><a href="mailto:contact@aitoolshub.com">cristobalcamher@gmail.com</a></li>
             <li><a href="https://twitter.com/aitoolshub" target="_blank" rel="noopener noreferrer">Instagram</a></li>
             <li><a href="https://github.com/aitoolshub" target="_blank" rel="noopener noreferrer">GitHub</a></li>
           </ul>

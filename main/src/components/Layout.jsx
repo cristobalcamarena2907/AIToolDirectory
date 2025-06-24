@@ -1,4 +1,4 @@
-import { Outlet, Link, useNavigate } from 'react-router-dom';
+import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { signOut } from 'firebase/auth';
 import { auth } from '../services/firebase';
@@ -9,6 +9,7 @@ import Footer from './Footer';
 function Layout() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSignOut = async () => {
     try {
@@ -16,6 +17,16 @@ function Layout() {
       navigate('/');
     } catch (error) {
       console.error('Error signing out:', error);
+    }
+  };
+
+  // Handle AI-pedia logo click
+  const handleLogoClick = (e) => {
+    e.preventDefault();
+    if (location.pathname === '/') {
+      window.location.reload();
+    } else {
+      navigate('/');
     }
   };
 
@@ -33,9 +44,9 @@ function Layout() {
       <nav className="navbar">
         <div className="nav-content">
           <div className="nav-left">
-            <Link to="/" className="nav-logo">
+            <a href="/" className="nav-logo" onClick={handleLogoClick}>
               AI-pedia
-            </Link>
+            </a>
           </div>
           <div className="nav-right">
             <Link to="/" className="nav-icon-button" title="Home">
